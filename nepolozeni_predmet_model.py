@@ -46,6 +46,7 @@ class NepolozeniPredmetModel(QtCore.QAbstractTableModel):
         elif index.column() == 2 and role == QtCore.Qt.EditRole:
             predmet.broj_polaganja = value
             return True
+        return False
 
     def flags(self, index):
         return super().flags(index) | QtCore.Qt.ItemIsEditable
