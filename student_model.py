@@ -1,8 +1,8 @@
 from PySide2 import QtCore
 
-
+#treba promjeniti sad da bude genericki model
 class StudentModel(QtCore.QAbstractTableModel):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, metadata={},data={}):# izmjeniti da bude 
         super().__init__(parent)
         self.students = [] # nije dvodimenzionalni niz
 

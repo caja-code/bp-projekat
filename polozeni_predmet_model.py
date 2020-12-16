@@ -14,7 +14,7 @@ class PolozeniPredmetModel(QtCore.QAbstractTableModel):
     def columnCount(self,index):
         return 3
 
-    def data(self, index, role= QtCore.Qt.DisplayRole):
+    def data(self, index, role= QtCore.Qt.DisplayRole):#staviti for petlju
         predmet = self.get_element(index)
         if index.column() == 0 and role == QtCore.Qt.DisplayRole:
             return predmet.naziv
