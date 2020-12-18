@@ -34,7 +34,7 @@ with open("studebts_metadata.json", "w") as metafile:
     metadata["delimiter"] = ","
     json.dump(metadata, metafile)
 
-with open("student_metadata.json", "r") as metafile:
+with open("student_data_metadata.json", "r") as metafile:
     metadata = json.load(metafile)
     print(metadata["columns"])
 
