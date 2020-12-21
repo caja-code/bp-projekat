@@ -57,7 +57,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.addToolBar(self.tool_bar)
         
         self.setMenuBar(self.menu_bar)
-        self._createMenuBar()
         self.addDockWidget(QtCore.Qt.LeftDockWidgetArea,self.structure_dock)
         self.setCentralWidget(self.central_widget)
         
