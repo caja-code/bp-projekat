@@ -16,13 +16,13 @@ class MainWindow(QtWidgets.QMainWindow):
         #self = QtWidgets.QMainWindow()
         self.resize(600, 480)
         self.setWindowTitle("Editor generickih podataka")
-        self.setWindowIcon(QtGui.QIcon("icons8-edit-file-64.png"))
+        self.setWindowIcon(QtGui.QIcon("slike/icons8-edit-file-64.png"))
        
     
         self.central_widget = QtWidgets.QTabWidget(self)
        
         self.workspace = WorkspaceWidget(self.central_widget)
-        self.central_widget.addTab(self.workspace, QtGui.QIcon("icons8-edit-file-64.png"), "Prikaz tabele")
+        self.central_widget.addTab(self.workspace, QtGui.QIcon("slike/icons8-edit-file-64.png"), "Prikaz tabele")
         
         # Dodat menu bar u svoju klasu i instanciran
         self.menu_bar = MenuBar()
@@ -38,7 +38,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.structure_dock.clicked.connect(self.workspace.open_file)
         
-
+    
         # Dodat status bar u svoju klasu i instanciran
         self.status_bar =  StatusBar()
         self.setStatusBar(self.status_bar)
@@ -46,8 +46,6 @@ class MainWindow(QtWidgets.QMainWindow):
         # Dodat tool bar u svoju klasu i  instanciran
         self.tool_bar = ToolBar()
         self.addToolBar(self.tool_bar)
-
-    
 
 
         self.central_widget.setTabsClosable(True)
@@ -58,4 +56,4 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.show()
         
-        # menu_bar.setParent(main_window)
+
