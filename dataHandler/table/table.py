@@ -1,4 +1,6 @@
 from PySide2 import QtWidgets
+from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QAbstractItemView
 
 
 class Table(QtWidgets.QTableWidget):
@@ -17,10 +19,18 @@ class Table(QtWidgets.QTableWidget):
 
         self.setHorizontalHeaderLabels(model_c.metadata_c.metadata["headers"])
 
+        self.setSelectionBehavior(self.SelectRows)
+
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+
         for i in range(0, row_count):
             model_c.set_table_row(self, i)
 
         self.itemChanged.connect(self.on_change)
+        self.customContextMenuRequested.connect(self.displayMenu)
+
+    def displayMenu(self):
+        ...#QMenu mini_menu(self)
 
     # TODO: Obrisati ako ne treba
     def get_title(self):
@@ -33,7 +43,10 @@ class Table(QtWidgets.QTableWidget):
             ...
             # TODO: pop up widow sa ispisiavnjem greske da tabla nije uspesno promenjna
 
+    def delete_row(self):
+        row = self.currentRow()
+        self.removeRow(row)
+
     def save(self):
 
         self.model_c.write_data()
-

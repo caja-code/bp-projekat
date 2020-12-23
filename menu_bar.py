@@ -4,8 +4,8 @@ from PySide2.QtGui import QIcon
 
 
 class MenuBar(QtWidgets.QMenuBar):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent):
+        super().__init__(parent)
 
         self.file_menu = QtWidgets.QMenu("File", self)
         self.edit_menu = QtWidgets.QMenu("Edit", self)
@@ -33,6 +33,7 @@ class MenuBar(QtWidgets.QMenuBar):
         # save
         self.saveAct = QAction(QIcon('slike/save.jpg'), '&Save', self)
         self.saveAct.setStatusTip('Under Construction')
+        self.saveAct.triggered.connect(self.parent().workspace.save)
 
         self.file_menu.addAction(self.saveAct)
 

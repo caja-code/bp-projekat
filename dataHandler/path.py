@@ -15,6 +15,9 @@ class Path:
     def get_file_name(self):
         return self.path.split('/')[-1]
 
+    def get_file_name_R(self):
+        return self.path.split('/')[-1].split('.')[0]
+
     def get_extension(self):
         return self.path.split('/')[-1].split('.')[-1]
         # path        : /home/igork/singi/BazePodataka-S1G1/bp-projekat/podaci/student_data.csv
