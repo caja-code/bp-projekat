@@ -27,7 +27,6 @@ class MainWindow(QtWidgets.QMainWindow):
         # Dodat menu bar u svoju klasu i instanciran
         self.menu_bar = MenuBar(self)
         self.setMenuBar(self.menu_bar)
-        #self.menu_bar.saveAct.triggered.connect(self.workspace.save)
 
         #TODO za Iliju: dodati structure dok u svoju posebu klasu
         #structure_dock = QtWidgets.QDockWidget("Structure dock", main_window)

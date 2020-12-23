@@ -1,6 +1,6 @@
 from PySide2 import QtWidgets
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QAbstractItemView
+from PySide2.QtCore import Qt, QPoint
+from PySide2.QtWidgets import QAbstractItemView, QAction
 
 
 class Table(QtWidgets.QTableWidget):
@@ -29,8 +29,16 @@ class Table(QtWidgets.QTableWidget):
         self.itemChanged.connect(self.on_change)
         self.customContextMenuRequested.connect(self.displayMenu)
 
-    def displayMenu(self):
-        ...#QMenu mini_menu(self)
+    def displayMenu(self, pos):
+
+        popMenu = QtWidgets.QMenu(self)
+
+        delete_selected_rows = QAction('Delete', self)
+
+        popMenu.addAction(delete_selected_rows)
+        popMenu.exec_(self.viewport().mapToGlobal(pos))
+
+        delete_selected_rows.triggered.connect(self.delete_selected_rows())
 
     # TODO: Obrisati ako ne treba
     def get_title(self):
@@ -43,10 +51,20 @@ class Table(QtWidgets.QTableWidget):
             ...
             # TODO: pop up widow sa ispisiavnjem greske da tabla nije uspesno promenjna
 
-    def delete_row(self):
-        row = self.currentRow()
-        self.removeRow(row)
+    def delete_selected_rows(self):
+        indexes = self.selectionModel().selectedRows()
+        for index in sorted(indexes, reverse=True):
+            del self.model_c.data[index.row()]
+            self.removeRow(index.row())
 
     def save(self):
-
         self.model_c.write_data()
+
+    def find(self, txt):
+        self.model_c.find(txt)
+        self.render_table()
+
+    def render_table(self):
+        for i in range(0, self.rowCount()):
+            if i not in self.model_c.temp_data:
+                self.hideRow(i)

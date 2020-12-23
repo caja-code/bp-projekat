@@ -45,7 +45,6 @@ class WorkspaceWidget(QtWidgets.QWidget):
         self.main_tab_widget.addTab(tab, file_c.path_c.get_file_name_R())
 
         table.setModel(file_c)
-        self.save_all()
 
     def delete_tab(self, index):
         self.main_tab_widget.removeTab(index)
