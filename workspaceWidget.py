@@ -67,3 +67,4 @@ class WorkspaceWidget(QtWidgets.QWidget):
             self.create_new_sequential_file_workspace(file_c)
         else:
             self.create_new_serial_file_workspace(file_c)
+

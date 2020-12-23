@@ -28,7 +28,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.menu_bar = MenuBar()
         self.setMenuBar(self.menu_bar)
 
-        #TODO za Iliju: dodati structure dok u svoju posebu klasu
+        
         #structure_dock = QtWidgets.QDockWidget("Structure dock", main_window)
         
         self.structure_dock = StructureDock("Structure dock", self)
@@ -37,8 +37,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.menu_bar.view_menu.addAction(self.toggle_structure_dock_action)
         
         self.structure_dock.clicked.connect(self.workspace.open_file)
+
         
-    
+        
+        
+        
+
         # Dodat status bar u svoju klasu i instanciran
         self.status_bar =  StatusBar()
         self.setStatusBar(self.status_bar)
