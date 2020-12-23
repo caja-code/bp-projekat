@@ -38,20 +38,32 @@ class WorkspaceWidget(QtWidgets.QWidget):
             file_c.set_table_row(table, i)
 
     def create_new_serial_file_workspace(self, file_c):
-        table = Table(self.main_tab_widget)
+        tab = QtWidgets.QTabWidget(self)
+        table = Table(tab)
 
-        self.main_tab_widget.addTab(table, file_c.get_file_name())
-        
+        tab.addTab(table, file_c.get_file_name())
+        self.main_tab_widget.addTab(tab, file_c.path_c.get_file_name_R())
+
         table.setModel(file_c)
+        self.save_all()
 
     def delete_tab(self, index):
         self.main_tab_widget.removeTab(index)
 
     def save(self):
-        self.main_tab_widget.currentWidget.table.save()
+        print("Kliknuo sam sav!!!!!")#self.main_tab_widget.currentWidget().currentWidget().table.save()
 
-    def save_all(self):
-        ...
+    def save_all(self, close=False):
+        for i in range(0, self.main_tab_widget.count()):  # prolazimo kroz sve glavne tabove fajlova
+            self.main_tab_widget.setCurrentIndex(i)
+            current_tab = self.main_tab_widget.currentWidget()
+
+            for j in range(0, current_tab.count()):  # prolazimo korz sve table fajlova(serijaka ima samo 1)
+                current_tab.setCurrentIndex(j)
+                current_tab.currentWidget().save()
+
+            if close:
+                self.main_tab_widget.removeTab(i)
 
     def open_file(self, file_path):
 
