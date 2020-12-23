@@ -1,5 +1,5 @@
-from PySide2 import QtWidgets
-
+from PySide2 import QtWidgets,QtGui, QtCore
+from PySide2.QtWidgets import QMainWindow, QAction, QApplication,QPushButton, QMessageBox
 from dataHandler.file import File
 from dataHandler.path import Path
 from dataHandler.table.table import Table
@@ -53,6 +53,7 @@ class WorkspaceWidget(QtWidgets.QWidget):
         print("Kliknuo sam sav!!!!!")#self.main_tab_widget.currentWidget().currentWidget().table.save()
 
     def save_all(self, close=False):
+        print("Kliknuo sam sav!!!!!")
         for i in range(0, self.main_tab_widget.count()):  # prolazimo kroz sve glavne tabove fajlova
             self.main_tab_widget.setCurrentIndex(i)
             current_tab = self.main_tab_widget.currentWidget()
@@ -67,9 +68,11 @@ class WorkspaceWidget(QtWidgets.QWidget):
     def open_file(self, file_path):
 
         path_c = Path(file_path)
-
+        #TODO otvoriti dodatni window za path
         if path_c.get_extension() != "csv":
             # TODO: prekinuti program sa pop out window i obavestiti korisnika da moze da otvori samo csv fajl
+            
+            
             return
 
         file_c = File(path_c)
@@ -78,3 +81,6 @@ class WorkspaceWidget(QtWidgets.QWidget):
             self.create_new_sequential_file_workspace(file_c)
         else:
             self.create_new_serial_file_workspace(file_c)
+
+
+#self.button.clicked.connect(showpop)
