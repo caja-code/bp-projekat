@@ -2,6 +2,7 @@ from PySide2 import QtWidgets
 
 from dataHandler.file import File
 from dataHandler.path import Path
+from dataHandler.table.table import Table
 
 
 class WorkspaceWidget(QtWidgets.QWidget):
@@ -23,10 +24,10 @@ class WorkspaceWidget(QtWidgets.QWidget):
         self.main_tab_widget.tabCloseRequested.connect(self.delete_tab)
         # self.show_tabs()
 
-    def create_new_serial_file_workspace(self, file_c):
+    def create_new_sequential_file_workspace(self, file_c):
         title = file_c.get_file_name()
-        row_count = file_c.rowCount()
-        column_count = file_c.columnCount()
+        row_count = file_c.row_count()
+        column_count = file_c.column_count()
 
         table = QtWidgets.QTableWidget(row_count, column_count, self.main_tab_widget)
         self.main_tab_widget.addTab(table, title)
@@ -36,18 +37,21 @@ class WorkspaceWidget(QtWidgets.QWidget):
         for i in range(0, row_count):
             file_c.set_table_row(table, i)
 
-    def create_new_sequential_file_workspace(self, file_c):
-        table = QtWidgets.QTableView(self.main_tab_widget)
-
-        table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
-        table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+    def create_new_serial_file_workspace(self, file_c):
+        table = Table(self.main_tab_widget)
 
         self.main_tab_widget.addTab(table, file_c.get_file_name())
-
+        
         table.setModel(file_c)
 
     def delete_tab(self, index):
         self.main_tab_widget.removeTab(index)
+
+    def save(self):
+        self.main_tab_widget.currentWidget.table.save()
+
+    def save_all(self):
+        ...
 
     def open_file(self, file_path):
 

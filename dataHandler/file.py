@@ -1,4 +1,5 @@
 import csv
+import fileinput
 
 import PySide2
 from PySide2 import QtCore
@@ -8,8 +9,9 @@ from PySide2 import QtWidgets
 
 # from dataHandler.path import Path
 
+# TODO: naprvit QtCore.QAbstractTableModel
 
-class File(QtCore.QAbstractTableModel):
+class File:
     def __init__(self, path_c):  # metadata={}, data={}):
         # path_c = Path 'Class'(path of file
         super().__init__()
@@ -46,46 +48,61 @@ class File(QtCore.QAbstractTableModel):
         except:
             pass  # TODO: error slucaj ako data file ne postoji
 
+    def write_data(self):
+        # TODO: error
+        with open(self.path_c.path, 'w') as file:
+            # creating a csv writer object
+            writer = csv.DictWriter(file,
+                                    fieldnames=self.metadata_c.metadata["headers"],
+                                    delimiter=self.metadata_c.metadata["delimiter"],
+                                    quoting=self.metadata_c.metadata["quoting"])
+
+            # writing the headersa
+            writer.writeheader()
+
+            # writing the data rows
+            writer.writerows(self.data)
+
+
+    # TODO  : pisanje podataka na kraju izvrsanja programa
+
     def get_element(self, index):
         return self.data[0]
 
-    def rowCount(self, parent: PySide2.QtCore.QModelIndex = None):
+    def row_count(self, parent: PySide2.QtCore.QModelIndex = None):
         return len(self.data)
 
-    def columnCount(self, parent: PySide2.QtCore.QModelIndex = None):
+    def column_count(self, parent: PySide2.QtCore.QModelIndex = None):
         return self.metadata_c.metadata["headers_count"]
 
+    # TODO: obtisati
     def data(self, index, role=QtCore.Qt.DisplayRole):
         # TODO: dodati obradu uloga (role)
         data_row = self.data[index]  # self[index]
         headers = self.metadata_c.metadata["headers"]
 
-        if 0 <= index < self.columnCount and role == QtCore.Qt.DisplayRole:
-            return data_row.headers[index]
+        if 0 <= index < self.column_count and role == QtCore.Qt.DisplayRole:
+            return data_row[headers[index]]
 
         return None
 
-    def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
-        if 0 <= section < self.columnCount() and orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-            return self.metadata_c.metadata["headers"][section]
-        return None
+    def set_data(self, row, col, value):
+        if 0 > row or row >= self.column_count() or 0 > col or col >= self.column_count() and value != "":
+            return False
 
-    # metode za editable model
-    def setData(self, index, value, role=QtCore.Qt.EditRole):
-        data_row = self.data[index]
+        data_row = self.data[row]
         headers = self.metadata_c.metadata["headers"]
 
-        if 0 >= index < self.columnCount and value != "":
-            data_row[headers[index]] = value
-            return True
+        data_row[headers[col]] = value
 
-        return False
+        return True
 
+    # TODO: obtisati
     def flags(self, index):
         return super().flags(index) | QtCore.Qt.ItemIsEditable  # ili nad bitovima
 
     def set_table_row(self, table, i):
         row_objet = self.data[i]
         headers = self.metadata_c.metadata["headers"]
-        for j in range(0, self.columnCount()):
+        for j in range(0, self.column_count()):
             table.setItem(i, j, QtWidgets.QTableWidgetItem(str(row_objet[headers[j]])))

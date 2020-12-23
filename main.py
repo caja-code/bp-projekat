@@ -1,8 +1,9 @@
 import sys
 
-from PySide2 import  QtWidgets, QtGui, QtCore
+from PySide2 import QtWidgets, QtGui, QtCore
 
 from main_window import MainWindow
+
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
@@ -13,4 +14,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

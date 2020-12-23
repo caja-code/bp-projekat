@@ -1,7 +1,1 @@
-{"is_sequential": false,
-  "headers": ["Index", " \"Height(Inches)", " \"Weight(Pounds)"],
-  "skip_first_line": true,
-  "header_name": [],
-  "delimiter": ",",
-  "quoting": 0,
-  "headers_count": 3}
+{"is_sequential": false, "headers": ["Index", " \"Height(Inches)", " \"Weight(Pounds)"], "skip_first_line": true, "header_name": [], "delimiter": ",", "quoting": 0, "headers_count": 3}
