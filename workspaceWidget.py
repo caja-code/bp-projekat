@@ -63,6 +63,11 @@ class WorkspaceWidget(QtWidgets.QWidget):
             if self.main_tab_widget.widget(i).check_path(file_path):
                 self.main_tab_widget.setCurrentWidget(self.main_tab_widget.widget(i))
                 return True
+            current_tab = self.main_tab_widget.widget(i)
+            for j in range(0, current_tab.count()):  # prolazimo korz sve table fajlova(serijaka ima samo 1)
+                if current_tab.widget(j).model_c.path_c.path == file_path:
+                    self.main_tab_widget.setCurrentWidget(current_tab)
+                    return True
 
     def open_file(self, file_path):
         if self.is_file_open(file_path):

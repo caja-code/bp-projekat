@@ -9,11 +9,11 @@ from menu_bar import MenuBar
 
 
 class MainWindow(QtWidgets.QMainWindow):
-    #Glavni window
+
 
     def __init__(self):
         super().__init__()
-        #self = QtWidgets.QMainWindow()
+
         self.resize(600, 480)
         self.setWindowTitle("Editor generickih podataka")
         self.setWindowIcon(QtGui.QIcon("slike/icons8-edit-file-64.png"))
@@ -27,9 +27,6 @@ class MainWindow(QtWidgets.QMainWindow):
         # Dodat menu bar u svoju klasu i instanciran
         self.menu_bar = MenuBar(self)
         self.setMenuBar(self.menu_bar)
-
-        
-        #structure_dock = QtWidgets.QDockWidget("Structure dock", main_window)
         
         self.structure_dock = StructureDock("Structure dock", self)
         

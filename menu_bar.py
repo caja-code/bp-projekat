@@ -1,15 +1,15 @@
 import sys
 from PySide2 import  QtWidgets, QtGui, QtCore
-from PySide2.QtWidgets import QMainWindow, QAction, QApplication,QPushButton, QMessageBox,QDialog,QFileDialog, QInputDialog
-from PySide2.QtGui import QIcon 
-
+from PySide2.QtWidgets import QMainWindow, QAction, QApplication,QPushButton, QMessageBox,QDialog,QFileDialog, QInputDialog, QTextEdit
+from PySide2.QtGui import QIcon, QFont
+from PySide2.QtPrintSupport import QPrinter,QPrintPreviewDialog
+from extra_window import ExtraWindow
 
 
 
 class MenuBar(QtWidgets.QMenuBar):
     def __init__(self,parent):
         super().__init__(parent)
-        #self.parent = parent
         
         self.file_menu = QtWidgets.QMenu("File",self)
         self.edit_menu = QtWidgets.QMenu("Edit",self)
@@ -26,7 +26,8 @@ class MenuBar(QtWidgets.QMenuBar):
         #new
         self.newAct = QAction(QIcon('slike/new.png'), '&New', self)
         self.newAct.setStatusTip('Under Construction')
-        self.newAct.triggered.connect(self.show_popup)
+        self.newAct.triggered.connect(self.open_new_table_dialog)
+        #self.parent().extra_window.open_second_window
         self.file_menu.addAction(self.newAct)
 
         #open
@@ -98,6 +99,14 @@ class MenuBar(QtWidgets.QMenuBar):
 
         self.edit_menu.addAction(self.forwardAct)
 
+        #View
+        self.viewAct = QAction(QIcon('slike/print.png'), '&Print Preview', self)
+        self.viewAct.setStatusTip('Under Construction')
+        self.viewAct.triggered.connect(self.print_preview_dialog)
+
+        self.view_menu.addAction(self.viewAct)
+
+
         #help menu
         #about
         self.aboutAct = QAction(QIcon('slike/about.jpg'), '&About', self)
@@ -125,18 +134,30 @@ class MenuBar(QtWidgets.QMenuBar):
         msg.setDetailedText("This command isnt currently working pleas stand by untill we finish the contructions")
 
         msg.buttonClicked.connect(self.popup_button)
-        x = msg.exec_()
+        execute = msg.exec_()
 
     def popup_button(self,i):
         print(i.text())
 
     def open_dialog_box(self,file_path):
         filename = QFileDialog.getOpenFileName()
-        self.parent().workspace.open_file(filename[0])#proslediti novu putanju da otvaramo file
+        self.parent().workspace.open_file(filename[0])
 
     def show_dialog(self):
         text = QInputDialog.getText(self,'Input Dialog',"Quick Search:")
         self.parent().workspace.find(text)
 
+    def print_preview_dialog(self):
+        printer = QPrinter(QPrinter.HighResolution)
+        previewDialog = QPrintPreviewDialog(printer,self)
 
+        previewDialog.paintRequested.connect(self.print_preview)
+        previewDialog.exec_()
 
+    def print_preview(self,printer):
+        self.textEdit.print_(printer)
+        
+
+    def open_new_table_dialog(self):
+        extra_window = ExtraWindow(self)
+       
