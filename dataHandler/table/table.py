@@ -72,6 +72,7 @@ class Table(QtWidgets.QTableWidget):
         self.model_c.write_data()
 
     def find(self, txt):
+        print(txt)
         self.render_table(self.model_c.find(txt))
 
     def render_table(self, arr):

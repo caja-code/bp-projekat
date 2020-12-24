@@ -103,9 +103,10 @@ class File:
             table.setItem(i, j, QtWidgets.QTableWidgetItem(str(row_objet[headers[j]])))
 
     def find(self, txt):
+        print(txt)
         index = 0
         matches = []
-        for value in self.data:
+        for value in enumerate(self.data):
             if txt in str(value):
                 matches.append(index)
             index += 1

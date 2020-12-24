@@ -55,9 +55,10 @@ class WorkspaceWidget(QtWidgets.QWidget):
             self.main_tab_widget.currentWidget().currentWidget().save()
             self.parent().setStatusTip("Fajl je sacuavn")
 
-    def find(self,  txt):
+    def find(self,  parm):
+        txt, _ = parm
         if self.main_tab_widget.count() > 0:
-            self.main_tab_widget.currentWidget().currentWidget().find("4TH")
+            self.main_tab_widget.currentWidget().currentWidget().find(txt)
             self.parent().setStatusTip("Nadjena su pogadjana")
 
     def save_all(self, close=False):
