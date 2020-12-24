@@ -50,10 +50,17 @@ class WorkspaceWidget(QtWidgets.QWidget):
         self.main_tab_widget.removeTab(index)
 
     def save(self):
-        print("Kliknuo sam sav!!!!!")#self.main_tab_widget.currentWidget().currentWidget().table.save()
+        #TODO: popo up error ako nema otvorernih fajlova
+        if self.main_tab_widget.count() > 0:
+            self.main_tab_widget.currentWidget().currentWidget().save()
+            self.parent().setStatusTip("Fajl je sacuavn")
+
+    def find(self,  txt):
+        if self.main_tab_widget.count() > 0:
+            self.main_tab_widget.currentWidget().currentWidget().find("4TH")
+            self.parent().setStatusTip("Nadjena su pogadjana")
 
     def save_all(self, close=False):
-        print("Kliknuo sam sav!!!!!")
         for i in range(0, self.main_tab_widget.count()):  # prolazimo kroz sve glavne tabove fajlova
             self.main_tab_widget.setCurrentIndex(i)
             current_tab = self.main_tab_widget.currentWidget()
@@ -65,14 +72,21 @@ class WorkspaceWidget(QtWidgets.QWidget):
             if close:
                 self.main_tab_widget.removeTab(i)
 
-    def open_file(self, file_path):
+    def is_file_open(self, file_path):
+        for i in range(0, self.main_tab_widget.count()):  # prolazimo kroz sve glavne tabove fajlova
+            current_tab = self.main_tab_widget.widget(i)
+            for j in range(0, current_tab.count()):  # prolazimo korz sve table fajlova(serijaka ima samo 1)
+                if current_tab.widget(j).model_c.path_c.path == file_path:
+                    self.main_tab_widget.setCurrentWidget(current_tab)
+                    return True
 
+    def open_file(self, file_path):
+        if self.is_file_open(file_path):
+            return
         path_c = Path(file_path)
         #TODO otvoriti dodatni window za path
         if path_c.get_extension() != "csv":
             # TODO: prekinuti program sa pop out window i obavestiti korisnika da moze da otvori samo csv fajl
-            
-            
             return
 
         file_c = File(path_c)

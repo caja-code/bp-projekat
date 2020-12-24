@@ -78,7 +78,6 @@ class MenuBar(QtWidgets.QMenuBar):
         self.edit_menu.addAction(self.cutAct)
         #find
         self.findAct = QAction(QIcon('slike/find.jpg'), '&Find', self)
-        self.findAct.triggered.connect(self.show_popup)
         self.findAct.setStatusTip('Quick search')
 
         self.edit_menu.addAction(self.findAct)

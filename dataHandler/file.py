@@ -1,5 +1,4 @@
 import csv
-import fileinput
 
 import PySide2
 from PySide2 import QtCore
@@ -76,11 +75,10 @@ class File:
         return self.metadata_c.metadata["headers_count"]
 
     def set_data(self, row, col, value):
-        if 0 > row or row >= self.column_count() or 0 > col or col >= self.column_count() and value != "":
+        if 0 > row or row >= self.row_count() or 0 > col or col >= self.column_count() and value != "":
             return False
 
         data_row = self.data[row]
-
         headers = self.metadata_c.metadata["headers"]
 
         data_row[headers[col]] = value
@@ -93,6 +91,12 @@ class File:
 
     def set_table_row(self, table, i):
         row_objet = self.data[i]
+        headers = self.metadata_c.metadata["headers"]
+        for j in range(0, self.column_count()):
+            table.setItem(i, j, QtWidgets.QTableWidgetItem(str(row_objet[headers[j]])))
+
+    def set_temp_table_row(self, table, i):
+        row_objet = self.temp_data[i]
 
         headers = self.metadata_c.metadata["headers"]
         for j in range(0, self.column_count()):
@@ -100,7 +104,9 @@ class File:
 
     def find(self, txt):
         index = 0
+        matches = []
         for value in self.data:
             if txt in str(value):
-                self.temp_data.append(index)
-        index += 1
+                matches.append(index)
+            index += 1
+        return matches

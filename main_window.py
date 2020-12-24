@@ -40,7 +40,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
         # Dodat status bar u svoju klasu i instanciran
-        self.status_bar =  StatusBar()
+        self.status_bar = StatusBar()
         self.setStatusBar(self.status_bar)
 
         # Dodat tool bar u svoju klasu i  instanciran

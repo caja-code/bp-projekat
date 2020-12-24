@@ -2,6 +2,8 @@ from PySide2 import QtWidgets
 from PySide2.QtCore import Qt, QPoint
 from PySide2.QtWidgets import QAbstractItemView, QAction
 
+from dataHandler.sort.sort import sort
+
 
 class Table(QtWidgets.QTableWidget):
     def __init__(self, parent):
@@ -27,18 +29,27 @@ class Table(QtWidgets.QTableWidget):
             model_c.set_table_row(self, i)
 
         self.itemChanged.connect(self.on_change)
-        self.customContextMenuRequested.connect(self.displayMenu)
+        self.customContextMenuRequested.connect(self.option_menu)
+        self.horizontalHeader().sectionClicked.connect(self.sort_by_header)
 
-    def displayMenu(self, pos):
+    def option_menu(self, pos):
 
-        popMenu = QtWidgets.QMenu(self)
+        menu = QtWidgets.QMenu(self)
 
         delete_selected_rows = QAction('Delete', self)
 
-        popMenu.addAction(delete_selected_rows)
-        popMenu.exec_(self.viewport().mapToGlobal(pos))
+        menu.addAction(delete_selected_rows)
+        menu.exec_(self.viewport().mapToGlobal(pos))
 
         delete_selected_rows.triggered.connect(self.delete_selected_rows())
+
+    def sort_by_header(self, header):
+        ...
+        '''self.model_c.temp_data = sort(self.model_c.data, self.model_c.metadata_c.metadata["headers"][header])
+        self.clearContents()
+        #print(self.model_c.temp_data)
+        for i in range(0, len(self.model_c.temp_data)):
+            self.model_c.set_temp_table_row(self, i)'''
 
     # TODO: Obrisati ako ne treba
     def get_title(self):
@@ -46,7 +57,7 @@ class Table(QtWidgets.QTableWidget):
 
     def on_change(self):
         changed_item = self.currentItem()
-
+        self.parent().parent().parent().parent().setStatusTip("Izmena unesena")
         if not self.model_c.set_data(changed_item.row(), changed_item.column(), changed_item.text()):
             ...
             # TODO: pop up widow sa ispisiavnjem greske da tabla nije uspesno promenjna
@@ -61,10 +72,9 @@ class Table(QtWidgets.QTableWidget):
         self.model_c.write_data()
 
     def find(self, txt):
-        self.model_c.find(txt)
-        self.render_table()
+        self.render_table(self.model_c.find(txt))
 
-    def render_table(self):
+    def render_table(self, arr):
         for i in range(0, self.rowCount()):
-            if i not in self.model_c.temp_data:
+            if i not in arr:
                 self.hideRow(i)
