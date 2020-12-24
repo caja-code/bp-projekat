@@ -81,9 +81,6 @@ class WorkspaceWidget(QtWidgets.QWidget):
                     self.main_tab_widget.setCurrentWidget(current_tab)
                     return True
 
-    def open_file(self, file_path):
-        if self.is_file_open(file_path):
-            return
 
     def open_file(self, file_path):
         if self.is_file_open(file_path):
