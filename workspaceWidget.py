@@ -1,10 +1,8 @@
-from PySide2 import QtWidgets, QtGui, QtCore
-from PySide2.QtWidgets import QMainWindow, QAction, QApplication, QPushButton, QMessageBox
+from PySide2 import QtWidgets
 from dataHandler.file import File
 from dataHandler.path import Path
 from dataHandler.table.table import Table
 from dataHandler.workspace.sequental_editor import SequentialEditor
-from dataHandler.workspace.serial_editor import SerialEditor
 
 
 class WorkspaceWidget(QtWidgets.QWidget):
@@ -50,6 +48,10 @@ class WorkspaceWidget(QtWidgets.QWidget):
         if self.main_tab_widget.count() > 0:
             self.main_tab_widget.currentWidget().find(txt)
             self.parent().setStatusTip("Nadjena su pogadjana")
+
+    def reset_tables(self):
+        if self.main_tab_widget.count() > 0:
+            self.main_tab_widget.currentWidget().find('')
 
     def save_all(self, close=False):
         for i in range(0, self.main_tab_widget.count()):  # prolazimo kroz sve glavne tabove fajlova

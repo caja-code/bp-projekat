@@ -88,7 +88,7 @@ class MenuBar(QtWidgets.QMenuBar):
         self.edit_menu.addAction(self.findAct)
         #back
         self.backAct = QAction(QIcon('slike/back.png'), '&Back', self)
-        self.backAct.triggered.connect(self.show_popup)
+        self.backAct.triggered.connect(self.parent().workspace.reset_tables)
         self.backAct.setStatusTip('Go one step back')
 
         self.edit_menu.addAction(self.backAct)

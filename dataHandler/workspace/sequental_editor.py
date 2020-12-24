@@ -41,7 +41,11 @@ class SequentialEditor(QtWidgets.QTabWidget):
         for i in range(0, self.foreign_table_tabs.count()):
             self.foreign_table_tabs.widget(i).save()
 
-    def find(self, txt): ...
+    def find(self, txt):
+        self.main_table.find(txt)
+
+        for i in range(0, self.foreign_table_tabs.count()):
+            self.foreign_table_tabs.widget(i).find(txt)
 
     def row_selected(self, item):
         pos = self.model_c.metadata_c.metadata["headers"].index(self.model_c.metadata_c.metadata["seq"]["foreign_key_pos"])
@@ -51,3 +55,9 @@ class SequentialEditor(QtWidgets.QTabWidget):
     def filter_foreign_tables(self, object_id):
         for i in range(0, self.foreign_table_tabs.count()):
             self.foreign_table_tabs.widget(i).find(object_id, self.model_c.metadata_c.metadata["seq"]["foreign_key_pos"])
+
+    def reset_tables(self):
+        self.main_table.find('')
+
+        for i in range(0, self.foreign_table_tabs.count()):
+            self.foreign_table_tabs.widget(i).find('')
