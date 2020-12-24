@@ -5,9 +5,6 @@ from PySide2 import QtCore
 from dataHandler.metadata import MetaData
 from PySide2 import QtWidgets
 
-
-# from dataHandler.path import Path
-
 # TODO: naprvit QtCore.QAbstractTableModel
 
 class File:
@@ -19,7 +16,6 @@ class File:
         self.data = []
         self.temp_data = []
         self.parse_data()
-        # print(self.data)
 
     def __getitem__(self, index):
         return self.data[0]
@@ -85,29 +81,34 @@ class File:
 
         return True
 
-    # TODO: obtisati
-    def flags(self, index):
-        return super().flags(index) | QtCore.Qt.ItemIsEditable  # ili nad bitovima
-
     def set_table_row(self, table, i):
         row_objet = self.data[i]
         headers = self.metadata_c.metadata["headers"]
+
         for j in range(0, self.column_count()):
             table.setItem(i, j, QtWidgets.QTableWidgetItem(str(row_objet[headers[j]])))
 
-    def set_temp_table_row(self, table, i):
-        row_objet = self.temp_data[i]
+    def find(self, txt, foreign_key_pos=None):
+        if foreign_key_pos is None:
+            return self._find_txt(txt)
+        else:
+            return self._filter_foreign_key(txt, foreign_key_pos)
 
-        headers = self.metadata_c.metadata["headers"]
-        for j in range(0, self.column_count()):
-            table.setItem(i, j, QtWidgets.QTableWidgetItem(str(row_objet[headers[j]])))
-
-    def find(self, txt):
-        print(txt)
-        index = 0
+    def _find_txt(self, txt):
         matches = []
-        for value in enumerate(self.data):
+
+        for index, value in enumerate(self.data):
             if txt in str(value):
                 matches.append(index)
-            index += 1
+
+        return matches
+
+    def _filter_foreign_key(self, foreign_id, foreign_key_pos):
+        matches = []
+        foreign_id = int(foreign_id)
+
+        for index, value in enumerate(self.data):
+            if foreign_id == int(value[foreign_key_pos]):
+                matches.append(index)
+
         return matches

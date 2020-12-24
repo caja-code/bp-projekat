@@ -1,0 +1,1 @@
+{"is_sequential": false, "headers": ["Studnet Index", "Predmet_ID", "Naziv Predeta", "Ocena", "Kometar"], "skip_first_line": true, "header_name": [], "delimiter": ",", "quoting": 0, "headers_count": 5}
