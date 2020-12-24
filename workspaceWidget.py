@@ -67,9 +67,10 @@ class WorkspaceWidget(QtWidgets.QWidget):
                 self.main_tab_widget.removeTab(i)
 
     def open_file(self, file_path):
-
+        
         path_c = Path(file_path)
         #TODO otvoriti dodatni window za path
+        
         if path_c.get_extension() != "csv":
             # TODO: prekinuti program sa pop out window i obavestiti korisnika da moze da otvori samo csv fajl
             
@@ -84,4 +85,4 @@ class WorkspaceWidget(QtWidgets.QWidget):
             self.create_new_serial_file_workspace(file_c)
 
 
-#self.button.clicked.connect(showpop)
+

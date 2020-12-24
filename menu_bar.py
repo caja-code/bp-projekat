@@ -1,15 +1,16 @@
 import sys
 from PySide2 import  QtWidgets, QtGui, QtCore
-from PySide2.QtWidgets import QMainWindow, QAction, QApplication,QPushButton, QMessageBox
-from PySide2.QtGui import QIcon
+from PySide2.QtWidgets import QMainWindow, QAction, QApplication,QPushButton, QMessageBox,QDialog,QFileDialog, QInputDialog
+from PySide2.QtGui import QIcon 
+
 
 
 
 class MenuBar(QtWidgets.QMenuBar):
     def __init__(self,parent):
         super().__init__(parent)
-
-
+        #self.parent = parent
+        
         self.file_menu = QtWidgets.QMenu("File",self)
         self.edit_menu = QtWidgets.QMenu("Edit",self)
         self.view_menu = QtWidgets.QMenu("View",self)
@@ -32,8 +33,10 @@ class MenuBar(QtWidgets.QMenuBar):
         self.openAct = QAction(QIcon('slike/open.png'), '&Open', self)
         self.openAct.setStatusTip('Open file')
         #self.openAct.triggered.connect(self.parent().workspace.open_file)
-        self.openAct.triggered.connect(self.show_popup)
+        self.openAct.triggered.connect(self.open_dialog_box)
+        #self.openAct.triggered.connect(self.show_popup)
         self.file_menu.addAction(self.openAct)
+
 
         #save
         self.saveAct = QAction(QIcon('slike/save.jpg'), '&Save', self)
@@ -78,7 +81,7 @@ class MenuBar(QtWidgets.QMenuBar):
         self.edit_menu.addAction(self.cutAct)
         #find
         self.findAct = QAction(QIcon('slike/find.jpg'), '&Find', self)
-        self.findAct.triggered.connect(self.show_popup)
+        self.findAct.triggered.connect(self.show_dialog)
         self.findAct.setStatusTip('Quick search')
 
         self.edit_menu.addAction(self.findAct)
@@ -126,3 +129,23 @@ class MenuBar(QtWidgets.QMenuBar):
 
     def popup_button(self,i):
         print(i.text())
+
+    def open_dialog_box(self,file_path):
+        filename = QFileDialog.getOpenFileName()
+
+
+        self.parent().workspace.open_file(filename[0])#proslediti novu putanju da otvaramo file
+        
+  
+        #kako dobaviti putanji dokumenta sa kojim radim
+
+
+
+    def  show_dialog(self):
+        text = QInputDialog.getText(self,'Input Dialog',"Quick Search:")
+        self.parent().workspace.find(text)
+
+    #new otvara novi window sa labelama tipovima i dodavanjem kolona
+
+
+
