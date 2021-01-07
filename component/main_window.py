@@ -1,10 +1,11 @@
 from PySide2 import QtWidgets, QtGui, QtCore
-from dataHandler.workspace.workspaceWidget import WorkspaceWidget
-from structure_dock import StructureDock
 
-from status_bar import StatusBar
-from tool_bar import ToolBar
-from menu_bar import MenuBar
+from dataHandler.workspace.workspaceWidget import WorkspaceWidget
+
+from component.structure_dock import StructureDock
+from component.status_bar import StatusBar
+from component.tool_bar import ToolBar
+from component.menu_bar import MenuBar
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -14,7 +15,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.resize(600, 480)
         self.setWindowTitle("Editor generickih podataka")
-        self.setWindowIcon(QtGui.QIcon("slike/icons8-edit-file-64.png"))
+        self.setWindowIcon(QtGui.QIcon("../assets/img/icons8-edit-file-64.png"))
 
         self.workspace = WorkspaceWidget(self)
 

@@ -5,16 +5,16 @@ from PySide2.QtGui import QIcon, QFont
 from PySide2.QtPrintSupport import QPrinter,QPrintPreviewDialog
 
 
+from component.extra_window import ExtraWindow
 
-from extra_window import ExtraWindow
 
 class ToolBar(QtWidgets.QToolBar):
     def __init__(self):
         super().__init__()
 
-        self.newAction = QAction(QIcon("slike/new.png"), "&New", self)
-        self.openAction = QAction(QIcon("slike/open.png"), "&Open", self)
-        self.printAction = QAction(QIcon("slike/print.png"), "&Print", self)
+        self.newAction = QAction(QIcon("assets/img/new.png"), "&New", self)
+        self.openAction = QAction(QIcon("assets/img/open.png"), "&Open", self)
+        self.printAction = QAction(QIcon("assets/img/print.png"), "&Print", self)
         
         self.addAction(self.newAction)
         self.addAction(self.openAction)
@@ -46,4 +46,3 @@ class ToolBar(QtWidgets.QToolBar):
     
     def print_preview(self,printer):
         self.textEdit.print_(printer)
- 

@@ -1,10 +1,6 @@
 import json
 import csv
 
-# from multimethod import multimethod
-
-# from path import Path
-
 # file sa podacima : "student_data.csv"
 # file sa metaData : "student_data_metadata.json"
 
@@ -33,6 +29,9 @@ class MetaData:
                 metadata_file = open(self.metadata_path, 'w')
                 json.dump(blank_metadata, metadata_file)
                 metadata_file.close()
+
+    def get_headers_names(self):
+        return list(map(lambda header: header["name"], self.metadata["headers"]))
 
     def _make_blank_metadata(self):
         dialect = self._get_dialect()

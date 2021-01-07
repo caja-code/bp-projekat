@@ -1,6 +1,34 @@
 {
   "is_sequential": false,
   "headers": [
+    {
+      "name": "Region"
+    },
+    {
+      "name": "Country"
+    },
+    {
+      "name": "Item Type"
+    },
+    {
+      "name": "Sales Channel"
+    },
+    {
+      "name": "Order Priority"
+    },
+    {
+      "name": "Order Date"
+    },
+    {
+      "name": "Ship Date"
+    },{
+      "name": "Region"
+    },
+    {
+      "name": "Region"
+    },
+
+
     "Region",
     "Country",
     "Item Type",

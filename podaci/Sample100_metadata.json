@@ -1,1 +1,45 @@
-{"is_sequential": false, "headers": ["Serial Number", "Company Name", "Employee Markme", "Description", "Leave"], "skip_first_line": true, "header_name": [], "delimiter": ",", "quoting": 0, "headers_count": 5}
+{
+  "is_sequential": false,
+  "headers": [
+    {
+      "name": "Serial Number",
+      "is_primary": true,
+      "is_foreign_key": false,
+      "data_type": "int",
+      "not_null": true
+    },
+    {
+      "name": "Company Name",
+      "is_primary": true,
+      "is_foreign_key": true,
+      "data_type": "string",
+      "not_null": true
+    },
+    {
+      "name": "Employee Name",
+      "is_primary": false,
+      "is_foreign_key": true,
+      "data_type": "string",
+      "not_null": true
+    },
+    {
+      "name": "Description",
+      "is_primary": false,
+      "is_foreign_key": false,
+      "data_type": "string",
+      "not_null": true
+    },
+    {
+      "name": "Leave",
+      "is_primary": false,
+      "is_foreign_key": false,
+      "data_type": "bool",
+      "not_null": false
+    }
+  ],
+  "skip_first_line": true,
+  "header_name": [],
+  "delimiter": ",",
+  "quoting": 0,
+  "headers_count": 5
+}

@@ -3,6 +3,22 @@
   <component name="JsonSchemaMappingsProjectConfiguration">
     <state>
       <map>
+        <entry key="*.resjson">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="*.resjson" />
+              <option name="relativePathToSchema" value="https://json.schemastore.org/resjson" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="podaci/Sample100_metadata.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
         <entry key=".eslintrc">
           <value>
             <SchemaInfo>

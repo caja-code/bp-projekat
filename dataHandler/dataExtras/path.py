@@ -11,15 +11,15 @@ class Path:
 
     def get_file_name(self):
         return self.path.split('/')[-1]
-
-    def get_file_name_R(self):
-        return self.path.split('/')[-1].split('.')[0]
-
-    def get_extension(self):
-        return self.path.split('/')[-1].split('.')[-1]
         # path        : /home/igork/singi/BazePodataka-S1G1/bp-projekat/podaci/student_data.csv
         # .split('/') : ["home","igork","singi" .... "student_data.csv"]
         # [-1]        : vracamo poslednji element gore navedenog niza - "student_data.csv"
+
+    def get_file_name_R(self):
+        return self.get_file_name().split('.')[0]
+
+    def get_extension(self):
+        return self.get_file_name().split('.')[-1]
         # .split('.') : delimo "student_data.csv" na ["student_data", "csv"]
         # [-1]        : vracamo poslednji element gore navedenog niza - "csv" koji je ujedno i ekstenzija tog fajla
 

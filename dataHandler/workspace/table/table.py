@@ -23,7 +23,7 @@ class Table(QtWidgets.QTableWidget):
         self.setColumnCount(column_count)
         self.setRowCount(row_count)
 
-        self.setHorizontalHeaderLabels(self.model_c.metadata_c.metadata["headers"])
+        self.set_horizontal_header_labels()
 
         self.setSelectionBehavior(self.SelectRows)
 
@@ -37,7 +37,6 @@ class Table(QtWidgets.QTableWidget):
         self.horizontalHeader().sectionClicked.connect(self.sort_by_header)
 
     def option_menu(self, pos):
-
         menu = QtWidgets.QMenu(self)
 
         delete_selected_rows = QAction('Delete', self)
@@ -46,6 +45,10 @@ class Table(QtWidgets.QTableWidget):
         menu.exec_(self.viewport().mapToGlobal(pos))
 
         delete_selected_rows.triggered.connect(self.delete_selected_rows())
+
+    def set_horizontal_header_labels(self):
+        for i in range(0, self.model_c.column_count()):
+            self.setHorizontalHeaderItem(i, self.model_c.horizontal_header_item(i))
 
     def sort_by_header(self, header):
         ...
@@ -69,7 +72,7 @@ class Table(QtWidgets.QTableWidget):
     def delete_selected_rows(self):
         indexes = self.selectionModel().selectedRows()
         for index in sorted(indexes, reverse=True):
-            del self.model_c.data[index.row()]
+            self.model_c.delete(index.row())
             self.removeRow(index.row())
 
     def save(self):

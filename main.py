@@ -1,9 +1,8 @@
 import sys
 
-from PySide2 import QtWidgets, QtGui, QtCore
+from PySide2 import QtWidgets
 
-from main_window import MainWindow
-
+from component.main_window import MainWindow
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

@@ -21,22 +21,22 @@ class WorkspaceWidget(QtWidgets.QWidget):
         self.main_tab_widget = QtWidgets.QTabWidget(self)
         self.main_tab_widget.setTabsClosable(True)
         self.main_tab_widget.tabCloseRequested.connect(self.delete_tab)
-        # self.show_tabs()
 
     def delete_tab(self, index):
+        # TODO : dodati pop up windo sa pitanjem da li da se sacuva
         self.main_tab_widget.removeTab(index)
 
     def save(self):
         # TODO: popo up error ako nema otvorernih fajlova
         if self.main_tab_widget.count() > 0:
             self.main_tab_widget.currentWidget().save()
-            self.parent().setStatusTip("Fajl je sacuavn")
+            # TODO : dodati obaestenje u toolbar
 
     def find(self, parm):
         txt, _ = parm
         if self.main_tab_widget.count() > 0:
             self.main_tab_widget.currentWidget().find(txt)
-            self.parent().setStatusTip("Nadjena su pogadjana")
+            # TODO : dodati obaestenje u toolbar
 
     def reset_tables(self):
         if self.main_tab_widget.count() > 0:
