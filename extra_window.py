@@ -1,13 +1,6 @@
+from PySide2 import  QtWidgets
+from PySide2.QtWidgets import QVBoxLayout, QLineEdit,QDialogButtonBox
 
-import sys
-
-from PySide2 import  QtWidgets, QtGui, QtCore
-from PySide2.QtWidgets import QWidget,QMainWindow, QVBoxLayout, QApplication,QPushButton,QDialog,QApplication, QLabel, QGroupBox,QLineEdit,QDialogButtonBox
-from PySide2.QtGui import QIcon,QFont
-from status_bar import StatusBar
-from PySide2.QtCore import Qt
-
-from workspaceWidget import WorkspaceWidget
 
 class ExtraWindow(QtWidgets.QDialog):
     def __init__(self,parent):

@@ -1,34 +1,35 @@
-from PySide2 import QtWidgets, QtGui, QtCore
-from PySide2.QtWidgets import QMainWindow, QAction, QApplication, QPushButton, QMessageBox
-from dataHandler.file import File
-from dataHandler.path import Path
-from dataHandler.table.table import Table
+from PySide2 import QtWidgets
+from dataHandler.dataExtras.file import File
+from dataHandler.dataExtras.path import Path
+from dataHandler.workspace.table.table import Table
 
 
 class SequentialEditor(QtWidgets.QTabWidget):
-    def __init__(self, parent, file_c):
+    def __init__(self, parent, file_c, set_model=False):
         self.model_c = file_c
         super().__init__(parent)
 
-        self.main_layout = QtWidgets.QVBoxLayout()
+        self.main_layout = QtWidgets.QVBoxLayout()                 # postavljanje main lyouta koji
 
-        self.foreign_table_tabs = QtWidgets.QTabWidget(self)
+        self.foreign_table_tabs = QtWidgets.QTabWidget(self)      # pravljenje widgeta koji sadrzi child tabele
 
-        self.main_table = Table(self)
+        self.main_table = Table(self, file_c, set_model)            # glavan tabela
         self.main_table.itemClicked.connect(self.row_selected)
 
         for foreign_table_path in self.model_c.metadata_c.metadata["seq"]["foreign_tables"]:
             foreign_file_c = File(Path(foreign_table_path))
-            table = Table(self.foreign_table_tabs, foreign_file_c)
-            self.foreign_table_tabs.addTab(table, foreign_file_c.get_file_name())
+            self.foreign_table_tabs.addTab(Table(self.foreign_table_tabs, foreign_file_c, set_model), foreign_file_c.get_file_name())
 
         self.main_layout.addWidget(self.main_table)
         self.main_layout.addWidget(self.foreign_table_tabs)
 
         self.setLayout(self.main_layout)
 
-    def set_model(self, file_c):
-        self.main_table.setModel(file_c)
+    def set_model(self, file_c=False):
+        if file_c:
+            self.model_c = file_c
+
+        self.main_table.setModel(self.model_c)
 
         for i in range(0, len(self.model_c.metadata_c.metadata["seq"]["foreign_tables"])):
             self.foreign_table_tabs.widget(i).setModel()
@@ -38,6 +39,7 @@ class SequentialEditor(QtWidgets.QTabWidget):
 
     def save(self):
         self.main_table.save()
+
         for i in range(0, self.foreign_table_tabs.count()):
             self.foreign_table_tabs.widget(i).save()
 

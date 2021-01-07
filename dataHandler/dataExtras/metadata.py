@@ -64,7 +64,7 @@ class MetaData:
             data_file = open(self._data_path_c.path, 'r')
             return csv.Sniffer().sniff(data_file.read(2048)) # sinifer pravi dialect
         except:
-            # TODO: error slucaj ako data file ne postoji
+            # TODO: error slucaj ako dataExtras file ne postoji
             pass
         finally:
             if data_file is not None:

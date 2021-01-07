@@ -1,8 +1,5 @@
-from PySide2 import QtWidgets, QtGui, QtCore
-from PySide2.QtWidgets import QMainWindow, QAction, QApplication, QPushButton, QMessageBox
-from dataHandler.file import File
-from dataHandler.path import Path
-from dataHandler.table.table import Table
+from PySide2 import QtWidgets
+from dataHandler.workspace.table.table import Table
 
 
 class SerialEditor(QtWidgets.QTabWidget):

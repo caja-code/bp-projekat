@@ -1,1 +1,24 @@
-{"is_sequential": false, "headers": ["Region", "Country", "Item Type", "Sales Channel", "Order Priority", "Order Date", "Order ID", "Ship Date", "Units Sold", "Unit Price", "Unit Cost", "Total Revenue", "Total Cost", "Total Profit"], "skip_first_line": true, "header_name": [], "delimiter": ",", "quoting": 0, "headers_count": 14}
+{
+  "is_sequential": false,
+  "headers": [
+    "Region",
+    "Country",
+    "Item Type",
+    "Sales Channel",
+    "Order Priority",
+    "Order Date",
+    "Order ID",
+    "Ship Date",
+    "Units Sold",
+    "Unit Price",
+    "Unit Cost",
+    "Total Revenue",
+    "Total Cost",
+    "Total Profit"
+  ],
+  "skip_first_line": true,
+  "header_name": [],
+  "delimiter": ",",
+  "quoting": 0,
+  "headers_count": 14
+}

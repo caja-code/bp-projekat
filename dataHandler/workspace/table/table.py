@@ -6,12 +6,15 @@ from dataHandler.sort.sort import sort
 
 
 class Table(QtWidgets.QTableWidget):
-    def __init__(self, parent, model_c=None):
+    def __init__(self, parent, model_c=None, set_model=False):
         super().__init__(parent)
         self.model_c = model_c
 
+        if set_model:
+            self.setModel()
+
     def setModel(self, model_c=None):
-        if self.model_c is None:
+        if model_c is not None:
             self.model_c = model_c
 
         row_count = self.model_c.row_count()
@@ -46,7 +49,7 @@ class Table(QtWidgets.QTableWidget):
 
     def sort_by_header(self, header):
         ...
-        '''self.model_c.temp_data = sort(self.model_c.data, self.model_c.metadata_c.metadata["headers"][header])
+        '''self.model_c.temp_data = sort(self.model_c.dataExtras, self.model_c.metadata_c.metadata["headers"][header])
         self.clearContents()
         #print(self.model_c.temp_data)
         for i in range(0, len(self.model_c.temp_data)):

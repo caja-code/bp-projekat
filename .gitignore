@@ -116,3 +116,5 @@ dmypy.json
 
 # Visual studio code
 .vscode/*
+/sketches
+/sketches/

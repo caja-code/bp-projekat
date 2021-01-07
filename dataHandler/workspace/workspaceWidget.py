@@ -1,7 +1,7 @@
 from PySide2 import QtWidgets
-from dataHandler.file import File
-from dataHandler.path import Path
-from dataHandler.table.table import Table
+from dataHandler.dataExtras.file import File
+from dataHandler.dataExtras.path import Path
+from dataHandler.workspace.table.table import Table
 from dataHandler.workspace.sequental_editor import SequentialEditor
 
 
@@ -10,7 +10,6 @@ class WorkspaceWidget(QtWidgets.QWidget):
         super().__init__(parent)
         self.main_layout = QtWidgets.QVBoxLayout()
         self.main_tab_widget = None
-        self.tabEditor = None
 
         self.create_main_tab_widget()
 
@@ -23,16 +22,6 @@ class WorkspaceWidget(QtWidgets.QWidget):
         self.main_tab_widget.setTabsClosable(True)
         self.main_tab_widget.tabCloseRequested.connect(self.delete_tab)
         # self.show_tabs()
-
-    def create_new_sequential_file_workspace(self, file_c):
-        x = SequentialEditor(self, file_c)
-        self.main_tab_widget.addTab(x, file_c.path_c.get_file_name_R())
-        x.set_model(file_c)
-
-    def create_new_serial_file_workspace(self, file_c):
-        x = Table(self)
-        self.main_tab_widget.addTab(x, file_c.path_c.get_file_name_R())
-        x.setModel(file_c)
 
     def delete_tab(self, index):
         self.main_tab_widget.removeTab(index)
@@ -79,6 +68,6 @@ class WorkspaceWidget(QtWidgets.QWidget):
         file_c = File(path_c)
 
         if file_c.metadata_c.metadata["is_sequential"]:
-            self.create_new_sequential_file_workspace(file_c)
+            self.main_tab_widget.addTab(SequentialEditor(self, file_c, True), file_c.path_c.get_file_name_R())
         else:
-            self.create_new_serial_file_workspace(file_c)
+            self.main_tab_widget.addTab(Table(self, file_c, True), file_c.path_c.get_file_name_R())

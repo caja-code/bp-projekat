@@ -2,14 +2,14 @@ import csv
 
 import PySide2
 from PySide2 import QtCore
-from dataHandler.metadata import MetaData
+from dataHandler.dataExtras.metadata import MetaData
 from PySide2 import QtWidgets
+
 
 # TODO: naprvit QtCore.QAbstractTableModel
 
 class File:
-    def __init__(self, path_c):  # metadata={}, data={}):
-        # path_c = Path 'Class'(path of file
+    def __init__(self, path_c):  # path_c = Path 'Class'(path of file
         super().__init__()
         self.metadata_c = MetaData(path_c.get_metadata_path(), path_c)
         self.path_c = path_c
@@ -42,7 +42,7 @@ class File:
             data_file.close()
             del reader
         except:
-            pass  # TODO: error slucaj ako data file ne postoji
+            pass  # TODO: error slucaj ako dataExtras file ne postoji
 
     def write_data(self):
         # TODO: error
@@ -56,7 +56,7 @@ class File:
             # writing the headersa
             writer.writeheader()
 
-            # writing the data rows
+            # writing the dataExtras rows
             writer.writerows(self.data)
 
     # TODO  : pisanje podataka na kraju izvrsanja programa

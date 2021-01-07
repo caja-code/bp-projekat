@@ -1,7 +1,4 @@
-import json
-import os.path
-
-from dataHandler.metadata import METADATA_EXTRA_NAME
+from dataHandler.dataExtras.metadata import METADATA_EXTRA_NAME
 #METADATA_EXTRA_NAME = "_metadata.json"
 
 class Path:
