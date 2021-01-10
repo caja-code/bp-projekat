@@ -5,7 +5,12 @@
       "name": "Serial Number",
       "is_primary": true,
       "is_foreign_key": false,
-      "data_type": "int",
+      "data_type": {
+        "type": "int",
+        "min_value": null,
+        "max_value": null
+      },
+      "predefined_values": null,
       "not_null": true
     },
     {
@@ -41,5 +46,9 @@
   "header_name": [],
   "delimiter": ",",
   "quoting": 0,
-  "headers_count": 5
+  "headers_count": 5,
+  "dialect": {
+    "delimiter": " ",
+    "quoting": 0
+  }
 }

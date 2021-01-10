@@ -1,4 +1,6 @@
 from PySide2 import QtWidgets
+from PySide2.QtWidgets import QTabWidget
+
 from dataHandler.dataExtras.file import File
 from dataHandler.dataExtras.path import Path
 from dataHandler.workspace.table.table import Table
@@ -20,7 +22,16 @@ class WorkspaceWidget(QtWidgets.QWidget):
     def create_main_tab_widget(self):
         self.main_tab_widget = QtWidgets.QTabWidget(self)
         self.main_tab_widget.setTabsClosable(True)
+        self.main_tab_widget.setMovable(True)
         self.main_tab_widget.tabCloseRequested.connect(self.delete_tab)
+        self.main_tab_widget.currentChanged.connect(self.change_tool_bar)
+
+    def change_tool_bar(self):
+        if self.main_tab_widget.currentWidget() is not None:
+            self.main_tab_widget.currentWidget().create_my_tool_bar()
+            return
+
+        self.parent().tool_bar.editor_tool_bar.clearLayout()
 
     def delete_tab(self, index):
         # TODO : dodati pop up windo sa pitanjem da li da se sacuva
@@ -58,6 +69,7 @@ class WorkspaceWidget(QtWidgets.QWidget):
     def open_file(self, file_path):
         if self.is_file_open(file_path):
             return
+
         path_c = Path(file_path)
         # TODO otvoriti dodatni window za path
 
@@ -67,7 +79,9 @@ class WorkspaceWidget(QtWidgets.QWidget):
 
         file_c = File(path_c)
 
-        if file_c.metadata_c.metadata["is_sequential"]:
+        if file_c.metadata_c.metadata["sequential_info"]["is_sequential"]:
             self.main_tab_widget.addTab(SequentialEditor(self, file_c, True), file_c.path_c.get_file_name_R())
         else:
             self.main_tab_widget.addTab(Table(self, file_c, True), file_c.path_c.get_file_name_R())
+
+        self.main_tab_widget.setCurrentWidget(self.main_tab_widget.widget(self.main_tab_widget.count() - 1))

@@ -3,11 +3,14 @@ from datetime import datetime
 
 import PySide2
 from PySide2 import QtCore
+from PySide2.QtCore import Qt
 from PySide2.QtGui import QFont, QIcon
 
-from cache_files.log import write_log_data
+from cache.cache import write_log_data
 from dataHandler.dataExtras.metadata import MetaData
+
 from PySide2 import QtWidgets
+
 
 BOLD = QFont()
 BOLD.setBold(True)
@@ -44,12 +47,11 @@ class File:
             data_file = open(self.path_c.path, 'r')
 
             reader = csv.DictReader(data_file,
-                                    # dialect=self.metadata_c.metadata['dialect']
-                                    delimiter=self.metadata_c.metadata['delimiter'],
+                                    delimiter=self.metadata_c.metadata["dialect"]["delimiter"],
                                     fieldnames=self.metadata_c.get_headers_names(),
-                                    quoting=self.metadata_c.metadata["quoting"])
+                                    quoting=self.metadata_c.metadata["dialect"]["quoting"])
 
-            if self.metadata_c.metadata["skip_first_line"]:
+            if self.metadata_c.metadata["dialect"]["skip_first_line"]:
                 next(reader)
 
             for row in reader:
@@ -68,12 +70,11 @@ class File:
             # creating a csv writer object
             writer = csv.DictWriter(file,
                                     fieldnames=self.metadata_c.get_headers_names(),
-                                    delimiter=self.metadata_c.metadata["delimiter"],
-                                    quoting=self.metadata_c.metadata["quoting"])
+                                    delimiter=self.metadata_c.metadata["dialect"]["delimiter"],
+                                    quoting=self.metadata_c.metadata["dialect"]["quoting"])
 
             # writing the headersa
-            writer.writeheader()
-
+            # writer.writeheader()
             # writing the dataExtras rows
             writer.writerows(self.data)
 
@@ -98,7 +99,7 @@ class File:
         return len(self.data)
 
     def column_count(self, parent: PySide2.QtCore.QModelIndex = None):
-        return self.metadata_c.metadata["headers_count"]
+        return len(self.metadata_c.metadata["headers"])
 
     def horizontal_header_item(self, col):
 
@@ -112,6 +113,7 @@ class File:
 
         if header_data["is_primary"]:
             header_item.setIcon(QIcon(PRIMARY_KEY_ICON))
+            header_item.setFlags(Qt.ItemIsSelectable)
 
         if header_data["is_foreign_key"]:
             header_item.setIcon(QIcon(FOREIGN_KEY_ICON))
@@ -128,10 +130,10 @@ class File:
         if 0 > row or row >= self.row_count() or 0 > col or col >= self.column_count() and value != "":
             return False
 
-        data_row = self.data[row]
-        header = self.metadata_c.get_headers_names()[col]
+        data_row = self.data[row]   # dobavljamo row za promenu
+        header = self.metadata_c.metadata['headers'][col]["name"]
 
-        current_value = data_row[header]
+        changed_value = data_row[header]
         data_row[header] = value
 
         self.changes["is_saved"] = False
@@ -139,7 +141,7 @@ class File:
         change_txt = (f"{datetime.now()} ---  "
                       f" User changed file : {self.path_c.path} -"
                       f" for data at row  : {row} - "
-                      f" changed ({header}) from '{current_value}' to '{value}' -"
+                      f" changed ({header}) from '{changed_value}' to '{value}' -"
                       f" change saved : false")
 
         write_log_data(change_txt)
@@ -148,7 +150,7 @@ class File:
         return True
 
     def delete(self, index):
-        if not self.check_for_delete(index):                         # provera da li je brisnje rowa moguce
+        if not self.check_for_delete(index):  # provera da li je brisnje rowa moguce
             # TODO : ispisati korisniku da brisanje nije moguce
             return
 
@@ -163,12 +165,11 @@ class File:
         write_log_data(change_txt)
         self.changes["changes_committed"].append(change_txt)
 
-        del self.data[index]       # brisnje rowa
+        del self.data[index]  # brisnje rowa
 
     def check_for_delete(self, index):
-        if not self.metadata_c.metadata["is_sequential"]: # ako je podata serijski ne postoji razlog zasto bi zabranili brisanje
+        if not self.metadata_c.metadata["sequential_info"]["is_sequential"]:  # ako je podata serijski ne postoji razlog zasto bi zabranili brisanje
             return True
-        # TODO : dodti ostale provere
 
     def set_table_row(self, table, row):
         row_objet = self.data[row]
@@ -178,11 +179,11 @@ class File:
             value = row_objet[headers[col]]
             table.setItem(row, col, QtWidgets.QTableWidgetItem(str(value)))
 
-    def find(self, txt, foreign_key_pos=None):
-        if foreign_key_pos is None:
+    def find(self, txt):
+        if type(txt) is not list:
             return self._find_txt(txt)
         else:
-            return self._filter_foreign_key(txt, foreign_key_pos)
+            return self._filter_foreign_key(txt)
 
     def _find_txt(self, txt):
         matches = []
@@ -193,12 +194,35 @@ class File:
 
         return matches
 
-    def _filter_foreign_key(self, foreign_id, foreign_key_pos):
+    def _filter_foreign_key(self, relation_on_arr):
+        # relation_on_arr izgleda
+        # {
+        #    "value_to_find": 1a,
+        #     "find_in_col_name": "Ustanova"
+        # }
+        # {
+        #    "value_to_find": 15,
+        #     "find_in_col_name": Niov
+        # }
+        
         matches = []
-        foreign_id = int(foreign_id)
+        
+        for index, row in enumerate(self.data):
+            match = 0
+            for relation in relation_on_arr:
+                if row[relation["find_in_col_name"]] == relation["value_to_find"]:
+                    match += 1
 
-        for index, value in enumerate(self.data):
-            if foreign_id == int(value[foreign_key_pos]):
+            if match == len(relation_on_arr):
                 matches.append(index)
 
+        # for index, row in enumerate(self.data):
+        #     def inner():
+        #         for relation in relation_on_arr:
+        #             if row[relation["find_in_col_name"]] != relation["value_to_find"]:
+        #                 return
+        #         matches.append(index)
+        #    inner()'''
+
         return matches
+

@@ -1,3 +1,5 @@
+import os
+
 from dataHandler.dataExtras.metadata import METADATA_EXTRA_NAME
 #METADATA_EXTRA_NAME = "_metadata.json"
 
@@ -8,6 +10,12 @@ class Path:
         #self.metadata_path = self.get_metadata_path()
 
     # def isPathValid(self):
+
+    def is_same(self, other_path):
+        this_path = self.path.split(os.path.sep)[-2:]
+        other_path = other_path.split(os.path.sep)[-2:]
+
+        return this_path[0] == other_path[0] and this_path[1] == other_path[1]
 
     def get_file_name(self):
         return self.path.split('/')[-1]

@@ -33,6 +33,12 @@ class MetaData:
     def get_headers_names(self):
         return list(map(lambda header: header["name"], self.metadata["headers"]))
 
+    def get_header_position_by_name(self, col_name):
+        for pos, header in enumerate(self.metadata["headers"]):
+            if header["name"] == col_name:
+                return pos
+
+
     def _make_blank_metadata(self):
         dialect = self._get_dialect()
         headers = self._get_data_headers(dialect)

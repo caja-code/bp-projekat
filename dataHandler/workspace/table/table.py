@@ -37,14 +37,36 @@ class Table(QtWidgets.QTableWidget):
         self.horizontalHeader().sectionClicked.connect(self.sort_by_header)
 
     def option_menu(self, pos):
+        selected_rows_ln = len(self.get_selected_rows_indexes())
+        if selected_rows_ln == 1:
+            self.single_row_selected_options(pos)
+        if selected_rows_ln > 1:
+            # self.multiple_row_selected(pos)
+            self.single_row_selected_options(pos)
+        if selected_rows_ln == 0:
+            self.null_row_selected(pos)
+
+    def null_row_selected(self, pos):
+        ...
+
+    def single_row_selected_options(self, pos):
         menu = QtWidgets.QMenu(self)
 
         delete_selected_rows = QAction('Delete', self)
 
         menu.addAction(delete_selected_rows)
-        menu.exec_(self.viewport().mapToGlobal(pos))
 
-        delete_selected_rows.triggered.connect(self.delete_selected_rows())
+        action = menu.exec_(self.viewport().mapToGlobal(pos))
+
+        if action == delete_selected_rows:
+            self.delete_selected_rows()
+
+    def get_value(self, row, col_name):
+        pos = self.get_header_position_by_name(col_name)
+        return self.item(row, pos).text()
+
+    def get_header_position_by_name(self, col_name):
+        return self.model_c.metadata_c.get_header_position_by_name(col_name)
 
     def set_horizontal_header_labels(self):
         for i in range(0, self.model_c.column_count()):
@@ -75,11 +97,14 @@ class Table(QtWidgets.QTableWidget):
             self.model_c.delete(index.row())
             self.removeRow(index.row())
 
+    def get_selected_rows_indexes(self):
+        return self.selectionModel().selectedRows()
+
     def save(self):
         self.model_c.write_data()
 
-    def find(self, txt, foreign_key_pos=None):
-        self.render_table(self.model_c.find(txt, foreign_key_pos))
+    def find(self, txt):
+        self.render_table(self.model_c.find(txt))
 
     def check_path(self, file_path):
         return self.model_c.path_c.path == file_path
