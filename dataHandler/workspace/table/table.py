@@ -1,7 +1,10 @@
+import json
+
 from PySide2 import QtWidgets
 from PySide2.QtCore import Qt, QPoint
 from PySide2.QtWidgets import QAbstractItemView, QAction
 
+from component.filter import Filter
 from dataHandler.sort.sort import sort
 
 
@@ -61,12 +64,30 @@ class Table(QtWidgets.QTableWidget):
         if action == delete_selected_rows:
             self.delete_selected_rows()
 
+    def find_relation(self, item, callback, parent_path):
+        for relation_info in self.model_c.metadata_c.metadata["sequential_info"]["parent_relation"]:
+            if parent_path.is_same(relation_info["path_of_child_table"]):
+
+                relations = []
+
+                for relation in relation_info["relation_on"]:
+                    relations.append({
+                        "value_to_find": self.get_value(item.row(), relation["this_table_key"]),
+                        "find_in_col_name": relation["child_table_key"]
+                    })
+
+                callback(relations)
+                return
+
     def get_value(self, row, col_name):
         pos = self.get_header_position_by_name(col_name)
         return self.item(row, pos).text()
 
     def get_header_position_by_name(self, col_name):
         return self.model_c.metadata_c.get_header_position_by_name(col_name)
+
+    def get_header_meta(self, header_name):
+        return self.model_c.metadata_c.get_header_meta(header_name)
 
     def set_horizontal_header_labels(self):
         for i in range(0, self.model_c.column_count()):
@@ -115,3 +136,46 @@ class Table(QtWidgets.QTableWidget):
                 self.hideRow(i)
             else:
                 self.showRow(i)
+
+    def filter(self, parm):
+        data = []
+
+        for index, data_row in enumerate(self.model_c.data):
+            def check():
+                for condition in parm:
+                    print(condition)
+                    if condition is None:
+                        continue
+                    if condition["exact"]:
+                        if condition["value"] != data_row[condition["header_name"]]:
+                            return
+                        else:
+                            continue
+
+                    if not condition["value"] in data_row[condition["header_name"]]:
+                        return
+
+                    if condition["header_meta"]["meta"]["data_type"]["type"] == "str":
+                        continue
+
+                    if int(condition["value_additional_info"]["min_value"]) > int(data_row[condition["header_name"]]) or\
+                            int(condition["value_additional_info"]["max_value"]) < int(data_row[condition["header_name"]]):
+                        return
+
+                data.append(index)
+
+            check()
+
+        self.filter_rows(data)
+
+    def filter_rows(self, arr):
+        for row in range(self.rowCount()):
+            if row in arr:
+                self.showRow(row)
+            else:
+                self.hideRow(row)
+
+
+
+    def get_min_max(self, header_name):
+        return self.model_c.get_min(header_name), self.model_c.get_max(header_name)

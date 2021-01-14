@@ -33,6 +33,11 @@ class MetaData:
     def get_headers_names(self):
         return list(map(lambda header: header["name"], self.metadata["headers"]))
 
+    def get_header_meta(self, header_name):
+        for index, header in enumerate(self.metadata["headers"]):
+            if header["name"] == header_name:
+                return index, header
+
     def get_header_position_by_name(self, col_name):
         for pos, header in enumerate(self.metadata["headers"]):
             if header["name"] == col_name:

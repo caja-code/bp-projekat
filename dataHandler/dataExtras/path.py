@@ -3,6 +3,7 @@ import os
 from dataHandler.dataExtras.metadata import METADATA_EXTRA_NAME
 #METADATA_EXTRA_NAME = "_metadata.json"
 
+
 class Path:
     def __init__(self, path):
         self.path = path

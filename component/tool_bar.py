@@ -1,3 +1,4 @@
+import os
 import sys
 from PySide2 import QtWidgets, QtGui, QtCore
 from PySide2.QtWidgets import QMainWindow, QAction, QApplication, QPushButton, QMessageBox, QDialog, QFileDialog, \
@@ -7,17 +8,17 @@ from PySide2.QtPrintSupport import QPrinter, QPrintPreviewDialog
 
 from component.extra_window import ExtraWindow
 
-CHILD_RELATION = "assets/img/iconmonstr-generation-2-16.png"
-PARENT_RELATION = "assets/img/iconmonstr-generation-11-16.png"
+CHILD_RELATION = f"assets{os.path.sep}img{os.path.sep}iconmonstr-generation-2-16.png"
+PARENT_RELATION = f"assets{os.path.sep}img{os.path.sep}iconmonstr-generation-11-16.png"
 
 
 class ToolBar(QtWidgets.QToolBar):
     def __init__(self):
         super().__init__()
 
-        self.newAction = QAction(QIcon("assets/img/new.png"), "&New", self)
-        self.openAction = QAction(QIcon("assets/img/open.png"), "&Open", self)
-        self.printAction = QAction(QIcon("assets/img/print.png"), "&Print", self)
+        self.newAction = QAction(QIcon(f"assets{os.path.sep}img{os.path.sep}new.png"), "&New", self)
+        self.openAction = QAction(QIcon(f"assets{os.path.sep}img{os.path.sep}open.png"), "&Open", self)
+        self.printAction = QAction(QIcon(f"assets{os.path.sep}img{os.path.sep}print.png"), "&Print", self)
 
         self.editor_tool_bar = EditorToolBar(self)
 
@@ -85,11 +86,16 @@ class EditorToolBar(QtWidgets.QGroupBox):
 
         for option in self.parm["tools"]["options"]:
             button = QPushButton(QIcon(option["icon"]), option["name"], self.parent())
+            if option["tool_tip"]["have"]:
+                button.setToolTip(option["tool_tip"]["txt"])
             layout.insertWidget(-1, button)
             button.clicked.connect(option["callback"])
 
+        layout.insertSpacing(self.layout().count(), 50)
+
         for index, child_relation in enumerate(self.parm["tools"]["child"]["child_relations"]):
             button = QPushButton(QIcon(CHILD_RELATION), child_relation["name_of_child_table"], self.parent())
+            button.setToolTip(f'Go to CHILD table - "{child_relation["name_of_child_table"]}')
             button.parm = str(child_relation["path_of_child_table"])
             button.callback = self.parm["tools"]["child"]["callback"]
 
@@ -97,8 +103,11 @@ class EditorToolBar(QtWidgets.QGroupBox):
 
             button.clicked.connect(self.call_callback_for_parm)
 
+        layout.insertSpacing(self.layout().count(), 20)
+
         for index, parent_relation in enumerate(self.parm["tools"]["parent"]["parent_relations"]):
             button = QPushButton(QIcon(PARENT_RELATION), parent_relation["name_of_child_table"], self.parent())
+            button.setToolTip(f'Go to PARENT table - "{parent_relation["name_of_child_table"]}')
             button.parm = str(parent_relation["path_of_child_table"])
             button.callback = self.parm["tools"]["parent"]["callback"]
 
@@ -135,6 +144,10 @@ class EditorToolBar(QtWidgets.QGroupBox):
             [
                 {
                     "name":"Save",
+                    "tool_tip":"{
+                        "have":False,
+                        "txt":""
+                    },
                     "icon":None,
                     "action": - pointer to mehod,
                     "status_tip:"Some status tip"

@@ -1,3 +1,5 @@
+import os
+
 from PySide2 import QtWidgets, QtCore
 
 
@@ -12,7 +14,7 @@ class StructureDock(QtWidgets.QDockWidget):
 
         self.tree = QtWidgets.QTreeView()
         self.tree.setModel(self.model)
-        self.tree.setRootIndex(self.model.index(QtCore.QDir.currentPath()+"/data"))
+        self.tree.setRootIndex(self.model.index(QtCore.QDir.currentPath() + os.path.sep + "data"))
         self.tree.clicked.connect(self.file_clicked)
 
         self.setWidget(self.tree)

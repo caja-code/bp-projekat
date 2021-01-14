@@ -1,7 +1,10 @@
+import os
+
 from PySide2 import QtWidgets
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QAction, QPushButton, QToolButton
 
+from component.filter import Filter
 from dataHandler.dataExtras.file import File
 from dataHandler.dataExtras.path import Path
 from dataHandler.workspace.table.table import Table
@@ -16,21 +19,27 @@ class SequentialEditor(QtWidgets.QTabWidget):
         self.main_layout = QtWidgets.QVBoxLayout()  # postavljanje main lyouta koji
 
         self.foreign_table_tabs = QtWidgets.QTabWidget(self)  # pravljenje widgeta koji sadrzi child tabele
+        #self.foreign_table_tabs.currentChanged.connect(self.change_tool_bar)
 
         self.main_table = Table(self, file_c, set_model)  # glavan tabela
         self.main_table.itemClicked.connect(self.find_relation)
+        self.input_w = Filter(self.main_table, self.main_table.filter)
 
         for foreign_table_path in self.model_c.metadata_c.metadata["sequential_info"]["child_relation"]:
             foreign_file_c = File(Path(foreign_table_path["path_of_child_table"]))
-            self.foreign_table_tabs.addTab(Table(self.foreign_table_tabs, foreign_file_c, set_model),
-                                           foreign_file_c.get_file_name())
+            foreign_table = Table(self.foreign_table_tabs, foreign_file_c, set_model)
+            foreign_table.itemClicked.connect(self.execute)
+                                                                                  #self.find_relation_from_child,
+                                                                                  #.model_c.path_c))
+            self.foreign_table_tabs.addTab(foreign_table, foreign_file_c.get_file_name())
 
         self.main_layout.addWidget(self.main_table)
         self.main_layout.addWidget(self.foreign_table_tabs)
 
         self.setLayout(self.main_layout)
 
-        #self.create_my_tool_bar()
+    def execute(self, item):
+        self.sender().find_relation(item, self.find_relation_from_child, self.model_c.path_c)
 
     def set_model(self, file_c=False):
         if file_c:
@@ -43,7 +52,6 @@ class SequentialEditor(QtWidgets.QTabWidget):
 
     def check_path(self, file_path):
         return self.model_c.path_c.is_same(file_path)
-
 
     def save(self):
         self.main_table.save()
@@ -95,7 +103,12 @@ class SequentialEditor(QtWidgets.QTabWidget):
 
             self.foreign_table_tabs.widget(i).find(relations)
 
-    def reset_tables(self):
+    def find_relation_from_child(self, relations):
+        self.main_table.find(relations)
+        self.find_relation()
+
+
+    def reset_tables(self, _):
         self.main_table.find('')
 
         for i in range(0, self.foreign_table_tabs.count()):
@@ -105,11 +118,16 @@ class SequentialEditor(QtWidgets.QTabWidget):
         print(txt.text)
 
     def open_child(self, path=None):
-        #print(type(self.parent().parent().parent()))
         self.parent().parent().parent().open_file(path)
 
     def open_parent(self, path):
         self.parent().parent().parent().open_file(path)
+
+    def _filter(self):
+        self.input_w.show()
+
+    def filter(self, parm):
+        self.main_table.filter()
 
     def create_my_tool_bar(self):
         self.tool_bar.reset({
@@ -119,9 +137,46 @@ class SequentialEditor(QtWidgets.QTabWidget):
                 "options": [
                     {
                         "name": "",
-                        "icon": "assets/img/save.jpg",
+                        "tool_tip": {
+                            "have": True,
+                            "txt": f'Save - "{self.model_c.path_c.get_file_name()}"'
+                        },
+                        "icon": f"assets{os.path.sep}img{os.path.sep}save.jpg",
                         "callback": self.save,
+                        "signal": "",
                         "status_tip": f'Save changes on file {self.model_c.path_c.get_file_name()} .'
+                    },
+                    {
+                        "name": "",
+                        "tool_tip": {
+                            "have": True,
+                            "txt": f'Filter - "{self.model_c.path_c.get_file_name()}"'
+                        },
+                        "icon": f"assets{os.path.sep}img{os.path.sep}iconmonstr-filter-1-16.png",
+                        "callback": self._filter,
+                        "signal": "",
+                        "status_tip": f''
+                    },
+                    {
+                        "name": "",
+                        "tool_tip": {
+                            "have": True,
+                            "txt": f'Add new "{self.model_c.path_c.get_file_name_R()}" to - "{self.model_c.path_c.get_file_name()}"'
+                        },
+                        "icon": f"assets{os.path.sep}img{os.path.sep}iconmonstr-database-10-16.png",
+                        "callback": None,
+                        "signal": "",
+                        "status_tip": f''
+                    },
+                    {
+                        "name": "",
+                        "tool_tip": {
+                            "have": False,
+                            "txt": ""
+                        },
+                        "icon": f'assets{os.path.sep}img{os.path.sep}iconmonstr-link-1-16.png',
+                        "callback": self.reset_tables,
+                        "status_tip": f''
                     }
                 ],
                 "child": {

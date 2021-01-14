@@ -226,3 +226,27 @@ class File:
 
         return matches
 
+    def get_min(self, header_name):
+        if len(self.data) <= 0:
+            return False
+
+        min_v = self.data[0][header_name]
+
+        for row in self.data:
+            if row[header_name] < min_v:
+                min_v = row[header_name]
+
+        return int(min_v)
+
+    def get_max(self, header_name):
+        if len(self.data) <= 0:
+            return False
+
+        max_v = self.data[0][header_name]
+
+        for row in self.data:
+            if row[header_name] > max_v:
+                max_v = row[header_name]
+
+        return int(max_v)
+
