@@ -4,7 +4,15 @@ import csv
 # file sa podacima : "student_data.csv"
 # file sa metaData : "student_data_metadata.json"
 
+def save(path,json_file):#proslediti 2 parametra path, json 
+        try:
+            metadata_file = open(path, 'w')
+            json.dump(json_file,metadata_file)
+            metadata_file.close()
+        finally:
+            metadata_file.close()
 
+            
 def _make_blank_metadata():
     return {
         "headers": [],
@@ -34,7 +42,7 @@ def _make_blank_metadata():
     # prkzaivanje naziva kolona kao 1. reda u tabeli
 
 
-class MetaData:
+class MetaDataR:
     def __init__(self, metadata_path):
         self.metadata_path = metadata_path
         self.metadata = self.get_metadata()
@@ -55,12 +63,6 @@ class MetaData:
                 json.dump(blank_metadata, metadata_file)
                 metadata_file.close()
 
-    def save(self):
-        try:
-            metadata_file = open(self.metadata_path, 'w')
-            json.dump(self.metadata, metadata_file)
-            metadata_file.close()
-        finally:
-            metadata_file.close()
+    
 
 

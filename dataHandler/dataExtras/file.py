@@ -36,6 +36,7 @@ class File:
         }
         self.parse_data()
 
+
     def __getitem__(self, index):
         return self.data[0]
 
@@ -250,3 +251,20 @@ class File:
 
         return int(max_v)
 
+    
+    '''
+    def check_child(self,relation_on_arr):
+        for index, row in enumerate(self.data):
+            match = 0
+            for relation in relation_on_arr:
+                if row[relation["find_in_col_name"]] == relation["value_to_find"]:
+                    match += 1
+
+            if match == len(relation_on_arr):
+                matches.append(index)
+
+        child_relation
+    '''
+
+
+    
